@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +28,16 @@ Route::get('/my-offers', function () {
     return view('my_offers'); // Ensure you have a view named 'my_offers.blade.php'
 })->name('my-offers');
 
-// Route for placing an offer
-Route::get('/place-offer', function () {
-    return view('place_offer'); // Ensure you have a view named 'place_offer.blade.php'
-})->name('place-offer');
+
 
 Route::middleware('auth')->group(function () {
-    // Protected routes can be added here
+    Route::get('/cars/create', [CarController::class, 'createStep1'])->name('cars.create');
+    Route::post('/cars/create', [CarController::class, 'storeStep1']);
+
+    Route::get('/cars/create/{licensePlate}', [CarController::class, 'createStep2'])->name('cars.create.step2');
+    Route::post('/cars/create/{licensePlate}', [CarController::class, 'storeStep2']);
 });
+
 
 require __DIR__.'/auth.php';
 

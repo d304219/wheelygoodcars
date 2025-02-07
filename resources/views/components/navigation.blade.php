@@ -17,7 +17,7 @@
                     <a class="nav-link" href="{{ url('/my-offers') }}">Mijn aanbod</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/place-offer') }}">Aanbod plaatsen</a>
+                    <a class="nav-link" href="{{ url('/cars/create') }}">Aanbod plaatsen</a>
                 </li>
             </ul>
 
