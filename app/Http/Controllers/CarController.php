@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Car;
 
 class CarController extends Controller
@@ -53,21 +54,29 @@ class CarController extends Controller
             'mileage' => 'required|integer',
             'price' => 'required|numeric',
         ]);
-
-        Car::create([
+    
+        // Debug: Check alle sessiegegevens
+        // dd(session()->all());
+    
+        // Auto opslaan met sessiegegevens
+        $car = Car::create([
+            'user_id' => Auth::id(),
             'license_plate' => session('license_plate'),
             'make' => session('make'),
             'model' => session('model'),
             'production_year' => session('production_year'),
             'color' => session('color'),
-            'doors' => session('doors'),
-            'seats' => session('seats'),
-            'weight' => session('weight'),
+            'doors' => (int) session('doors'),
+            'seats' => (int) session('seats'),
+            'weight' => (int) session('weight'),
             'mileage' => $request->mileage,
             'price' => $request->price,
         ]);
-
-        return redirect()->route('cars.create')->with('success', 'Auto toegevoegd!');
+        
+    
+        return redirect()->route('cars.mycars')->with('success', 'Auto toegevoegd!');
+    }
+    
     public function myCars()
     {
         $myCars = Auth::user()->cars()->with('tags')->get();
