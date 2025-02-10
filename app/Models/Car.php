@@ -23,9 +23,22 @@ class Car extends Model
         'image',
         'sold_at',
         'views',
+        'user_id', // <-- Voeg deze toe!
+
     ];
 
     protected $casts = [
         'sold_at' => 'datetime',
     ];
+
+        public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function tags()
+{
+    return $this->belongsToMany(Tag::class);
+}
+
 }

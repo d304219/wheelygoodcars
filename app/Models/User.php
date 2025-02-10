@@ -27,4 +27,10 @@ class User extends Authenticatable
         'password' => 'hashed',
         'is_admin' => 'boolean',
     ];
+
+    public function cars()
+{
+    return $this->hasMany(Car::class);
+}
+
 }
