@@ -23,19 +23,20 @@ Route::get('/all-cars', function () {
     return view('all_cars'); // Ensure you have a view named 'all_cars.blade.php'
 })->name('all-cars');
 
-// Route for my offers
-Route::get('/my-offers', function () {
-    return view('my_offers'); // Ensure you have a view named 'my_offers.blade.php'
-})->name('my-offers');
+
 
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('/my-cars', [CarController::class, 'myCars'])->name('cars.mycars');
+
     Route::get('/cars/create', [CarController::class, 'createStep1'])->name('cars.create');
     Route::post('/cars/create', [CarController::class, 'storeStep1']);
 
     Route::get('/cars/create/{licensePlate}', [CarController::class, 'createStep2'])->name('cars.create.step2');
     Route::post('/cars/create/{licensePlate}', [CarController::class, 'storeStep2']);
+
+    Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
 });
 
 

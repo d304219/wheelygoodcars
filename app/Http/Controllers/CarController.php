@@ -68,5 +68,10 @@ class CarController extends Controller
         ]);
 
         return redirect()->route('cars.create')->with('success', 'Auto toegevoegd!');
+    public function myCars()
+    {
+        $myCars = Auth::user()->cars()->with('tags')->get();
+        return view('cars.mycars', compact('myCars'));
+    }   
     }
 }
