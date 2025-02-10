@@ -73,5 +73,12 @@ class CarController extends Controller
         $myCars = Auth::user()->cars()->with('tags')->get();
         return view('cars.mycars', compact('myCars'));
     }   
+    public function destroy($id)
+    {
+        $car = Car::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+        $car->delete();
+    
+        return redirect()->route('cars.mycars')->with('success', 'Auto verwijderd.');
     }
+    
 }
