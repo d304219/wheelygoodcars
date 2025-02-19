@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class CarSeeder extends Seeder
 {
@@ -18,6 +18,20 @@ class CarSeeder extends Seeder
         $faker = Faker::create();
         
         foreach (range(1, 250) as $index) {
+            $createdAt = Carbon::createFromTimestamp(rand(
+                strtotime('2024-01-01'),
+                strtotime('today')
+            ));
+
+            // Set 'sold_at' only if the car is sold
+            $soldAt = null;
+            if (rand(0, 1)) {
+                $soldAt = Carbon::createFromTimestamp(rand(
+                    strtotime('2024-01-01'),
+                    strtotime('today')
+                ));
+            }
+
             DB::table('cars')->insert([
                 'user_id' => rand(1, 150),
                 'license_plate' => strtoupper(Str::random(6)),
@@ -31,10 +45,11 @@ class CarSeeder extends Seeder
                 'weight' => $faker->randomFloat(2, 800, 3000),
                 'color' => $faker->safeColorName,
                 'image' => null,
-                'sold_at' => rand(0, 1) ? now() : null,
+                'sold_at' => $soldAt,
                 'views' => $faker->numberBetween(0, 1000),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => $createdAt,
+                'updated_at' => $createdAt,
             ]);
-        }    }
+        }
+    }
 }
