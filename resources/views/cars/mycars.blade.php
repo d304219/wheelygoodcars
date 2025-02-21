@@ -1,41 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <h2 class="mb-4 fw-bold">Mijn aanbod</h2>
+<div class="mx-auto py-10 text-center">
+    <h1 class="text-4xl font-bold">Mijn aanbod</h1>
+    <h2 class="text-2xl">Bekijk en beheer je auto's</h2>
+</div>
+
+<div class="mx-auto max-w-7xl bg-white p-6 rounded-lg shadow-md">
+    <h3 class="text-xl font-bold text-blue-600 mb-4">Mijn Autos</h3>
+    
     <div class="table-responsive">
-        <table class="table align-middle">
+        <table class="table-auto w-full border-collapse">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="text-center px-6 py-4">Afbeelding</th>
+                    <th class="px-6 py-4">Auto</th>
+                    <th class="text-primary px-6 py-4">Prijs</th>
+                    <th class="px-6 py-4">Merk & Model</th>
+                    <th class="px-6 py-4">Tags</th>
+                    <th class="px-6 py-4">Acties</th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach($myCars as $car)
-                    <tr class="border-bottom">
-                        <td class="text-center" style="width: 100px;">
-                            <div style="width: 100px; height: 100px; background-color: #ddd; display: flex; align-items: center; justify-content: center;">
-                                100 × 100
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="text-center py-4">
+                            <div class="border rounded-lg flex items-center justify-center mx-auto" style="width: 80px; height: 80px; background-color: #f8f9fa;">
+                                <span class="text-gray-400 text-sm">100 × 100</span>
                             </div>
                         </td>
-                        <td>
-                            <h5 class="fw-bold">{{ $car->license_plate }}</h5>
-                            @if($car->sold_at)
-                                <span class="badge bg-secondary">verkocht</span>
-                            @else
-                                <span class="badge bg-primary">te koop</span>
-                            @endif
+                        <td class="py-4 px-6">
+                            <h5 class="font-bold text-lg">{{ $car->license_plate }}</h5>
+                            <span class="badge {{ $car->sold_at ? 'bg-red-600' : 'bg-green-600' }} text-white px-2 py-1 rounded-full text-xs">
+                                {{ $car->sold_at ? 'Verkocht' : 'Te koop' }}
+                            </span>
                         </td>
-                        <td class="fs-5 fw-semibold">€{{ number_format($car->price, 2) }}</td>
-                        <td>{{ $car->make }} {{ $car->model }} {{ $car->production_year }}</td>
-                        <td>
-                            @foreach($car->tags as $tag)
-                                <span class="badge bg-light text-dark border border-secondary">{{ $tag->name }}</span>
-                            @endforeach
+                        <td class="text-primary font-semibold py-4 px-6">€{{ number_format($car->price, 2, ',', '.') }}</td>
+                        <td class="py-4 px-6">{{ $car->make }} {{ $car->model }} ({{ $car->production_year }})</td>
+                        <td class="py-4 px-6">
+                            <div class="flex flex-wrap gap-2">
+                                @foreach($car->tags as $tag)
+                                    <span class="badge bg-gray-100 text-gray-700 border border-gray-300 px-2 py-1 rounded-full text-xs">{{ $tag->name }}</span>
+                                @endforeach
+                            </div>
                         </td>
-                        <td>
-                            <form action="{{ route('cars.destroy', $car->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze auto wilt verwijderen?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Verwijderen</button>
-                            </form>
+                        <td class="py-4 px-6">
+                            <div class="flex space-x-2">
+                                <form action="{{ route('cars.destroy', $car->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je deze auto wilt verwijderen?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">🗑 Verwijderen</button>
+                                </form>
+                                <a href="{{ route('generate-pdf', $car->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">📥 Download PDF</a>
+                            </div>
                         </td>
-                        
                     </tr>
                 @endforeach
             </tbody>
