@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@ use App\Http\Controllers\CarController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->name('home');
 
 // Route for all cars
@@ -28,6 +29,8 @@ Route::get('/all-cars', function () {
 
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/generate-pdf/{id}', [PdfController::class, 'generatePdf'])->name('generate-pdf');
     Route::get('/my-cars', [CarController::class, 'myCars'])->name('cars.mycars');
 
     Route::get('/cars/create', [CarController::class, 'createStep1'])->name('cars.create');
