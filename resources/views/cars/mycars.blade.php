@@ -36,7 +36,7 @@
                             </span>
                         </td>
                         <td class="text-primary font-semibold py-4 px-6">€{{ number_format($car->price, 2, ',', '.') }}</td>
-                        <td class="py-4 px-6">{{ $car->make }} {{ $car->model }} ({{ $car->production_year }})</td>
+                        <td class="py-4 px-6">{{ $car->brand }} {{ $car->model }} ({{ $car->production_year }})</td>
                         <td class="py-4 px-6">
                             <div class="flex flex-wrap gap-2">
                                 @foreach($car->tags as $tag)

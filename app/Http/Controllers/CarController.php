@@ -28,7 +28,7 @@ class CarController extends Controller
 
             session([
                 'license_plate' => strtoupper($request->license_plate),
-                'make' => $car['merk'] ?? '',
+                'brand' => $car['merk'] ?? '',
                 'model' => $car['handelsbenaming'] ?? '',
                 'production_year' => substr($car['datum_eerste_toelating'] ?? '', 0, 4),
                 'color' => $car['eerste_kleur'] ?? '',
@@ -62,7 +62,7 @@ class CarController extends Controller
         $car = Car::create([
             'user_id' => Auth::id(),
             'license_plate' => session('license_plate'),
-            'make' => session('make'),
+            'brand' => session('brand'),
             'model' => session('model'),
             'production_year' => session('production_year'),
             'color' => session('color'),
@@ -81,7 +81,50 @@ class CarController extends Controller
     {
         $myCars = Auth::user()->cars()->with('tags')->get();
         return view('cars.mycars', compact('myCars'));
-    }   
+    }
+    
+    public function home()
+    {
+        // Haal unieke waarden op voor de dropdowns
+    }
+    public function searchResults(Request $request)
+    {
+        // Begin met een query voor alle auto's
+        $query = Car::query();
+    
+
+        // Filters toepassen op basis van de zoekopdracht
+        if ($request->has('brand') && $request->brand != '') {
+            $query->where('brand', $request->brand);
+        }
+        if ($request->has('model') && $request->model != '') {
+            $query->where('model', $request->model);
+        }
+        if ($request->has('min_mileage') && $request->min_mileage != '') {
+            $query->where('mileage', '>=', $request->min_mileage);
+        }
+        if ($request->has('max_mileage') && $request->max_mileage != '') {
+            $query->where('mileage', '<=', $request->max_mileage);
+        }
+        if ($request->has('min_year') && $request->min_year != '') {
+            $query->where('production_year', '>=', $request->min_year);
+        }
+        if ($request->has('max_year') && $request->max_year != '') {
+            $query->where('production_year', '<=', $request->max_year);
+        }
+        if ($request->has('min_price') && $request->min_price != '') {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price') && $request->max_price != '') {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Pagineer de resultaten
+        $cars = $query->paginate(12);
+        $totalCars = $query->count();
+
+        return view('cars.search-results', compact('cars', 'totalCars'));
+    }
     public function destroy($id)
     {
         $car = Car::where('id', $id)->where('user_id', Auth::id())->firstOrFail();

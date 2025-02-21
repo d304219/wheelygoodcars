@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Car;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $brands = Car::distinct()->pluck('brand');
+        $models = Car::distinct()->pluck('model');
+
+        return view('home', compact('brands', 'models'));
     }
 }

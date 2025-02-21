@@ -62,7 +62,7 @@ class CarResource extends Resource
                     ->badge(fn ($record) => $record->license_plate)
                     ->searchable(),
     
-                Tables\Columns\TextColumn::make('make')
+                Tables\Columns\TextColumn::make('brand')
                     ->sortable(),
     
                 Tables\Columns\TextColumn::make('model')
@@ -85,8 +85,8 @@ class CarResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('make')
-                    ->options(Car::pluck('make', 'make')->toArray()),
+                Tables\Filters\SelectFilter::make('brand')
+                    ->options(Car::pluck('brand', 'brand')->toArray()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

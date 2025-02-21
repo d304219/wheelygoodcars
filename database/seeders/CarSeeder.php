@@ -35,7 +35,7 @@ class CarSeeder extends Seeder
             DB::table('cars')->insert([
                 'user_id' => rand(1, 150),
                 'license_plate' => strtoupper(Str::random(6)),
-                'make' => $faker->company,
+                'brand' => $faker->company,
                 'model' => $faker->word,
                 'price' => $faker->randomFloat(2, 5000, 50000),
                 'mileage' => $faker->numberBetween(10000, 200000),

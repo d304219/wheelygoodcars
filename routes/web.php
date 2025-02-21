@@ -3,48 +3,30 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\HomeController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-
-// Route for all cars
-Route::get('/all-cars', function () {
-    return view('all_cars'); // Ensure you have a view named 'all_cars.blade.php'
-})->name('all-cars');
-
-
-
-
-
-Route::middleware('auth')->group(function () {
-
-    Route::get('/generate-pdf/{id}', [PdfController::class, 'generatePdf'])->name('generate-pdf');
-    Route::get('/my-cars', [CarController::class, 'myCars'])->name('cars.mycars');
-
-    Route::get('/cars/create', [CarController::class, 'createStep1'])->name('cars.create');
-    Route::post('/cars/create', [CarController::class, 'storeStep1']);
-
-    Route::get('/cars/create/{licensePlate}', [CarController::class, 'createStep2'])->name('cars.create.step2');
-    Route::post('/cars/create/{licensePlate}', [CarController::class, 'storeStep2']);
-
-    Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
-});
-
-
-require __DIR__.'/auth.php';
-
+// Authentication Routes
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Home Route (Fixed)
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Public Routes
+Route::get('/all-cars', [CarController::class, 'allCars'])->name('cars.all');
+Route::get('/search-results', [CarController::class, 'searchResults'])->name('search.results');
+
+// Authenticated Routes
+Route::middleware('auth')->group(function () {
+    // Car Routes
+    Route::prefix('cars')->group(function () {
+        Route::get('/my-cars', [CarController::class, 'myCars'])->name('cars.mycars');
+        Route::get('/create', [CarController::class, 'createStep1'])->name('cars.create');
+        Route::post('/create', [CarController::class, 'storeStep1']);
+        Route::get('/create/{licensePlate}', [CarController::class, 'createStep2'])->name('cars.create.step2');
+        Route::post('/create/{licensePlate}', [CarController::class, 'storeStep2']);
+        Route::delete('/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
+    });
+
+    // PDF Route
+    Route::get('/generate-pdf/{id}', [PdfController::class, 'generatePdf'])->name('generate-pdf');
+});

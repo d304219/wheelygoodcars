@@ -26,7 +26,7 @@
                 </tr>
                 <tr class="border-b">
                     <th class="p-3 text-left bg-gray-100">Merk</th>
-                    <td class="p-3">{{ $car->make }}</td>
+                    <td class="p-3">{{ $car->brand }}</td>
                 </tr>
                 <tr class="border-b">
                     <th class="p-3 text-left bg-gray-100">Model</th>

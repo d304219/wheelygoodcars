@@ -11,7 +11,7 @@ class CreateCarsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('license_plate')->unique();
-            $table->string('make');
+            $table->string('brand');
             $table->string('model');
             $table->decimal('price', 10, 2);
             $table->integer('mileage');
