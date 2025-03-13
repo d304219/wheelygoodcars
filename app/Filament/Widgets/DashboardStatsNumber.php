@@ -12,6 +12,9 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DashboardStatsNumber extends BaseWidget
 {
+    protected static ?string $pollingInterval = '10s';
+    protected static bool $isLazy = false;
+    
     protected function getCards(): array
     {
         $totalUsers = User::has('cars')->count();

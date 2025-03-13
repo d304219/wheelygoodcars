@@ -8,7 +8,9 @@ use Carbon\Carbon;
 
 class UsersOfferingCarsGraph extends ChartWidget
 {
-    protected static ?string $heading = 'New Users Offering Cars Each Month';
+
+    protected static ?string $pollingInterval = '10s';
+    protected static bool $isLazy = false;
 
     protected function getData(): array
     {

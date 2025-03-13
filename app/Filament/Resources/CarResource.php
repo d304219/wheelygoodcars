@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CarResource\Pages;
-use App\Filament\Resources\CarResource\RelationManagers;
 use App\Models\Car;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CarResource extends Resource
 {
@@ -27,7 +24,7 @@ class CarResource extends Resource
                     ->required()
                     ->maxLength(255),
                 
-                Forms\Components\TextInput::make('make')
+                Forms\Components\TextInput::make('brand')
                     ->required()
                     ->maxLength(255),
                 
@@ -89,7 +86,7 @@ class CarResource extends Resource
                     ->options(Car::pluck('brand', 'brand')->toArray()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -110,7 +107,7 @@ class CarResource extends Resource
     {
         return [
             'index' => Pages\ListCars::route('/'),
-            'create' => Pages\CreateCar::route('/create'),
+            // 'create' => Pages\CreateCar::route('/create'),
             'edit' => Pages\EditCar::route('/{record}/edit'),
         ];
     }
